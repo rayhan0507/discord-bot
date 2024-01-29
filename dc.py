@@ -7,12 +7,7 @@ import asyncio
 import time
 from jokeapi import Jokes
 
-intent = discord.Intents.default()
-intent.message_content = True
-intent.members = True
-
-intents = discord.Intents.all()
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix="!", intents= discord.Intents.all())
 
 sad = [('sedih aku mh'), ('nangis aku mh'), ('sedih aku'), ('aku sedih')]
 sad_word = ['cengeng', 'jangan sedih :sad:', 'cengeng sekali', ':sad:', "jangan bersedih bang aku setia bersamamu"]
@@ -37,8 +32,21 @@ permintaan_answer = ["hitam","kamu tampan dan sigma:sunglasses:"]
 
 bad_word = ["kontol", "anjing", "tolol"]
 
+pertanyaan = [("satu kata untuk saya")]
+jawaban = ["kamu ganteng :sunglasses:", "tampan", "jawir", "hitam legam :hot_face:", "raja ireng", 
+           "niggas", "kamu orang dermawan :kissing_heart:", "negro","kamu tampan dan pemberani", "cina ireng", 
+           "semok :yum:", "kamu sigma :sunglasses:"
+           ]
 
-voice_client = {}
+kata_apresiasi = [("sip"), ("mantap"), ("keren"), ("siplah"), ("nah")]
+kata_apresiasi_jawaban = ["keren bang", "keren nih", "keren ryxa", "siap"]
+
+slash_selamat_pagi = ["selamat pagi @everyone semoga hari ini adalah hari yang indah", "selamat pagi waktunya sekolah", 
+                      "bangun bangun udah pagi waktunya beraktivitas seperti biasa", "selamat pagi juga"
+                      ]
+
+
+voice_bot = {}
 
 yt_dl_opts = {'format': 'bestaudio/best'}
 ytdl = youtube_dl.YoutubeDL(yt_dl_opts)
@@ -46,34 +54,34 @@ ytdl = youtube_dl.YoutubeDL(yt_dl_opts)
 ffmpeg_options = {'options': '-vn'}
 
 
-@client.event
+@bot.event
 async def on_ready():
-  print('bot berhasil di nyalakan {0.user}'.format(client))
+  print('bot berhasil di nyalakan {0.user}'.format(bot))
 
 
-@client.event
+@bot.event
 async def on_member_join(member):
-  channel = client.get_channel(1174587014323109888)
+  channel = bot.get_channel(1174587014323109888)
   await channel.send(
       f'<@{member.id}> halo member baru selamat datang di server rexa')
 
 
-@client.event
+@bot.event
 async def on_message(message):
-  if message.author == client.user:
-    return
+  if message.author == bot.user:
+    
 
   if any(permintaan in message.content.lower() for permintaan in permintaan_word):
     await message.channel.send(random.choice(permintaan_answer))
-    return
+    
   
   if any(sedih in message.content.lower() for sedih in sad):
     await message.channel.send(random.choice(sad_word))
-    return
+    
 
   if any(negatif in message.content.lower() for negatif in negatif_word):
     await message.channel.send(random.choice(kata_negatif))
-    return
+    
 
   if any(good in message.content.lower() for good in good_word):
     await message.channel.send(random.choice(answer_good_word))
@@ -146,7 +154,7 @@ async def on_message(message):
 
   if message.content.startswith('!leave'):
     channel = message.author.voice.channel if message.author.voice else None
-    voice_channel = message.guild.voice_client
+    voice_channel = message.guild.voice_bot
     if voice_channel:
       await voice_channel.disconnect()
       await message.channel.send(
@@ -159,11 +167,11 @@ async def on_message(message):
   if message.content.startswith('!play'):
     try:
       url = message.content.split()[1]
-      if not message.guild.voice_client:
+      if not message.guild.voice_bot:
         voice_channel = await message.author.voice.channel.connect()
-        message.guild.voice_client = voice_channel
+        message.guild.voice_bot = voice_channel
 
-      voice_channel = message.guild.voice_client
+      voice_channel = message.guild.voice_bot
 
       loop = asyncio.get_event_loop()
       data = await loop.run_in_executor(
@@ -202,7 +210,56 @@ async def on_message(message):
   if any(negatif in message.content.lower() for negatif in negatif_word):
     await message.channel.send(random.choice(kata_negatif))
 
+
+@bot.tree.command(name="hello", description="menyapa")
+async def hello(interaction: discord.Interaction):
+    await interaction.response.send_message(f"hi {interaction.user.mention}, ini adalah slash komen semoga dengan fitur ini dapat membantu anda")
+
+@bot.tree.command(name="selamatpagi", description="menyapa di pagi hari")
+async def selamatpagi(interaction: discord.Interaction):
+    await interaction.response.send_message(f"selamat pagi {interaction.user.mention}")
+
+@bot.tree.command(name="selamatmalam", description="menyapa di malam hari")
+async def selamatpagi(interaction: discord.Interaction):
+    await interaction.response.send_message(f"selamat malam {interaction.user.mention}")
+
+# /help
+@bot.tree.command(name="help", description="membantu anda untuk mengetahui fitur dari bot ini")
+async def helping(interaction: discord.Interaction):
+    embed = discord.Embed(title="Ryxa General AI help", color=0x3399ff)
+    with open("C:\\Users\\USER\\Pictures\\Saved Pictures\\ryxaai.jpg", "rb") as file:
+        image = file.read()
+
+    embed.set_thumbnail(url="attachment://ryxaai.jpg")
+
+    # Dictionary untuk menyimpan informasi perintah
+    commands_info = {
+        "!hi": "menyapa anda",
+        "!selamat pagi": "menyapa anda di pagi hari",
+        "!selamat malam": "menyapa anda di malam hari",
+        "!kalkulasi": "membantu menghitung angka operasi",
+        "!join": "memasukan bot ke voice room",
+        "!leave": "membantu mengeluarkan bot dari voice room",
+        "!embed": "menunjukan embed"
+    }
+
+    # Menambahkan bidang untuk setiap perintah
+    for command, description in commands_info.items():
+        if commands_info:
+          embed.add_field(name=f"```{command}```", value=description, inline=True)
+
+    await interaction.response.send_message(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
+
+
+
+@bot.hybrid_command(name="say", description="say something")
+async def say(interaction: discord.Interaction, text: str):
+    await interaction.send(content=text)
+
+
+
+
 try:
-  client.run("your TOKEN")
+  bot.run("your TOKEN")
 except Exception as e:
   print(f'Error: {e}')
