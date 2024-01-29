@@ -67,111 +67,111 @@ async def on_member_join(member):
 
 
 @bot.event
-async def on_message(message):
-  if message.author == bot.user:
+async def on_ctx(ctx):
+  if ctx.author == bot.user:
     
 
-  if any(permintaan in message.content.lower() for permintaan in permintaan_word):
-    await message.channel.send(random.choice(permintaan_answer))
+  if any(permintaan in ctx.content.lower() for permintaan in permintaan_word):
+    await ctx.channel.send(random.choice(permintaan_answer))
     
   
-  if any(sedih in message.content.lower() for sedih in sad):
-    await message.channel.send(random.choice(sad_word))
+  if any(sedih in ctx.content.lower() for sedih in sad):
+    await ctx.channel.send(random.choice(sad_word))
     
 
-  if any(negatif in message.content.lower() for negatif in negatif_word):
-    await message.channel.send(random.choice(kata_negatif))
+  if any(negatif in ctx.content.lower() for negatif in negatif_word):
+    await ctx.channel.send(random.choice(kata_negatif))
     
 
-  if any(good in message.content.lower() for good in good_word):
-    await message.channel.send(random.choice(answer_good_word))
+  if any(good in ctx.content.lower() for good in good_word):
+    await ctx.channel.send(random.choice(answer_good_word))
 
-  if any(bad in message.content.lower() for bad in bad_word):
-    await message.channel.send(f'mohon untuk tidak berkata kasar, katakanlah kata yang sopan <@{message.author.id}>')
+  if any(bad in ctx.content.lower() for bad in bad_word):
+    await ctx.channel.send(f'mohon untuk tidak berkata kasar, katakanlah kata yang sopan <@{ctx.author.id}>')
 
-  if message.content.startswith('!hi ryxa'):
-    await message.channel.send(f'hi juga <@{message.author.id}>')
+  if ctx.content.startswith('!hi ryxa'):
+    await ctx.channel.send(f'hi juga <@{ctx.author.id}>')
 
-  if message.content.startswith('!selamat pagi'):
-    await message.channel.send('selamat pagi!')
+  if ctx.content.startswith('!selamat pagi'):
+    await ctx.channel.send('selamat pagi!')
 
-  if message.content.startswith('!calculate'):
-    expression = message.content[len('!calculate'):].strip()
+  if ctx.content.startswith('!calculate'):
+    expression = ctx.content[len('!calculate'):].strip()
     try:
       result = eval(expression)
-      await message.channel.send(f'Hasil: {result}')
+      await ctx.channel.send(f'Hasil: {result}')
     except Exception as e:
-      await message.channel.send(f'ada kesalahan ketik: {e}')
+      await ctx.channel.send(f'ada kesalahan ketik: {e}')
 
-  if message.content.startswith('!search'):
-    query = message.content[len('!search'):].strip()
-    await message.channel.send(f'Searching for: {query}')
+  if ctx.content.startswith('!search'):
+    query = ctx.content[len('!search'):].strip()
+    await ctx.channel.send(f'Searching for: {query}')
 
 
 
 # daftar manakan  ----------------------------------------------------------------
-  if message.content.startswith('!food'):
-    await message.channel.send(
+  if ctx.content.startswith('!food'):
+    await ctx.channel.send(
         'kami menyediakan banyak menu ketik !daftarmenumakanan untuk melihat menu'
     )
 
-  if message.content.startswith('!daftarmenumakanan'):
+  if ctx.content.startswith('!daftarmenumakanan'):
     formatted_text = "```css\nDaftar Menu:\n"
     for menu in menu_list:
       formatted_text += f"- {menu}\n"
     formatted_text += "```"
 
-    await message.channel.send(formatted_text)
-    await message.channel.send('pilih sesuka anda :blush:')
+    await ctx.channel.send(formatted_text)
+    await ctx.channel.send('pilih sesuka anda :blush:')
 
-  if message.content.startswith('!pesan'):
-    choice = message.content[len('!pesan'):].strip()
+  if ctx.content.startswith('!pesan'):
+    choice = ctx.content[len('!pesan'):].strip()
     if choice in menu_list:
-      await message.channel.send(f'{choice} di pesan')
+      await ctx.channel.send(f'{choice} di pesan')
     else:
-      await message.channel.send(f'menu {choice} tidak tersedia')
+      await ctx.channel.send(f'menu {choice} tidak tersedia')
 
 
 # help ----------------------------------------------------------------
 
-  if message.content.startswith('!help'):
-    await message.channel.send('bisa saya bantu? :blush:')
+  if ctx.content.startswith('!help'):
+    await ctx.channel.send('bisa saya bantu? :blush:')
     formatted_text = "```css\nPerintah:\n"
     for help in help_list:
       formatted_text += f'{help}\n'
     formatted_text += "```"
 
-    await message.channel.send(formatted_text)
+    await ctx.channel.send(formatted_text)
 
 # join / leave
-  if message.content.startswith('!join'):
-    channel = message.author.voice.channel if message.author.voice else None
+  if ctx.content.startswith('!join'):
+    channel = ctx.author.voice.channel if ctx.author.voice else None
     if channel:
       voice_channel = await channel.connect()
-      await message.channel.send(f"Berhasil masuk ke voice channel {channel}")
+      await ctx.channel.send(f"Berhasil masuk ke voice channel {channel}")
     else:
-      await message.channel.send("Kamu tidak ada di voice channel")
+      await ctx.channel.send("Kamu tidak ada di voice channel")
 
-  if message.content.startswith('!leave'):
-    channel = message.author.voice.channel if message.author.voice else None
-    voice_channel = message.guild.voice_bot
+  if ctx.content.startswith('!leave'):
+    channel = ctx.author.voice.channel if ctx.author.voice else None
+    voice_channel = ctx.guild.voice_bot
     if voice_channel:
       await voice_channel.disconnect()
-      await message.channel.send(
+      await ctx.channel.send(
           f"Berhasil keluar dari voice channel {channel}")
     else:
-      await message.channel.send("kamu tidak ada di voice channel")
+      await ctx.channel.send("kamu tidak ada di voice channel")
 
 
 # play music
-  if message.content.startswith('!play'):
+  if ctx.content.startswith('!play'):
     try:
-      url = message.content.split()[1]
-      if not message.guild.voice_bot:
-        voice_channel = await message.author.voice.channel.connect()
-        message.guild.voice_bot = voice_channel
+      url = ctx.content.split()[1]
+      if not ctx.guild.voice_bot:
+        voice_channel = await ctx.author.voice.channel.connect()
+        ctx.guild.voice_bot = voice_channel
 
-      voice_channel = message.guild.voice_bot
+      voice_channel = ctx.guild.voice_bot
 
       loop = asyncio.get_event_loop()
       data = await loop.run_in_executor(
@@ -186,7 +186,7 @@ async def on_message(message):
       print(err)
 # joke 
 
-  if message.content.startswith("!joke"):
+  if ctx.content.startswith("!joke"):
     try:
         j = await Jokes()
         blacklist = ["racist", "sexist"]  # Definisikan variabel blacklist
@@ -195,33 +195,33 @@ async def on_message(message):
         print(f"Error while fetching joke: {e}")
         return
 
-    message_content = ""
+    ctx_content = ""
     if joke["type"] == "single":
-        message_content = joke["joke"]
+        ctx_content = joke["joke"]
     else:
-        message_content = joke["setup"]
-        message_content += f" ||{joke['delivery']}||"
+        ctx_content = joke["setup"]
+        ctx_content += f" ||{joke['delivery']}||"
 
-    await message.channel.send(message_content)
+    await ctx.channel.send(ctx_content)
 
-  if any(sedih in message.content.lower() for sedih in sad):
-    await message.channel.send(random.choice(sad_word))
+  if any(sedih in ctx.content.lower() for sedih in sad):
+    await ctx.channel.send(random.choice(sad_word))
 
-  if any(negatif in message.content.lower() for negatif in negatif_word):
-    await message.channel.send(random.choice(kata_negatif))
+  if any(negatif in ctx.content.lower() for negatif in negatif_word):
+    await ctx.channel.send(random.choice(kata_negatif))
 
 
 @bot.tree.command(name="hello", description="menyapa")
 async def hello(interaction: discord.Interaction):
-    await interaction.response.send_message(f"hi {interaction.user.mention}, ini adalah slash komen semoga dengan fitur ini dapat membantu anda")
+    await interaction.response.send_ctx(f"hi {interaction.user.mention}, ini adalah slash komen semoga dengan fitur ini dapat membantu anda")
 
 @bot.tree.command(name="selamatpagi", description="menyapa di pagi hari")
 async def selamatpagi(interaction: discord.Interaction):
-    await interaction.response.send_message(f"selamat pagi {interaction.user.mention}")
+    await interaction.response.send_ctx(f"selamat pagi {interaction.user.mention}")
 
 @bot.tree.command(name="selamatmalam", description="menyapa di malam hari")
 async def selamatpagi(interaction: discord.Interaction):
-    await interaction.response.send_message(f"selamat malam {interaction.user.mention}")
+    await interaction.response.send_ctx(f"selamat malam {interaction.user.mention}")
 
 # /help
 @bot.tree.command(name="help", description="membantu anda untuk mengetahui fitur dari bot ini")
@@ -248,7 +248,7 @@ async def helping(interaction: discord.Interaction):
         if commands_info:
           embed.add_field(name=f"```{command}```", value=description, inline=True)
 
-    await interaction.response.send_message(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
+    await interaction.response.send_ctx(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
 
 
 
