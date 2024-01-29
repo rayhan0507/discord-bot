@@ -240,7 +240,10 @@ async def helping(interaction: discord.Interaction):
         "!kalkulasi": "membantu menghitung angka operasi",
         "!join": "memasukan bot ke voice room",
         "!leave": "membantu mengeluarkan bot dari voice room",
-        "!embed": "menunjukan embed"
+        "!sosmed": "menunjukan sosial media owner",
+        
+        "/other": "fitur yang lain"
+
     }
 
     # Menambahkan bidang untuk setiap perintah
@@ -248,8 +251,25 @@ async def helping(interaction: discord.Interaction):
         if commands_info:
           embed.add_field(name=f"```{command}```", value=description, inline=True)
 
-    await interaction.response.send_ctx(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
+    await interaction.response.send_message(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
 
+@bot.tree.command(name="other", description="berbagai macam fitur dari bot ini")
+async def other(interaction = discord.Interaction):
+    embed = discord.Embed(title = "Fitur lain help", color=0x3399ff)
+
+    other_commands = {
+        "satu kata untuk saya": "bot akan memanggil anda dengan istilah yang random"
+
+    }
+
+    for komentar, deskripsi in other_commands.items():
+        if other_commands.items() == len(other_commands):
+           print("fitur other anda kurang")
+        else:
+           embed.add_field(name=f"```{komentar}```", value=deskripsi, inline=True)
+           print("anda membuka fitur other embed")
+    
+    await interaction.response.send_message(embed=embed)
 
 
 @bot.hybrid_command(name="say", description="say something")
