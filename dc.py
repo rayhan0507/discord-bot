@@ -385,6 +385,6 @@ async def Email(interaction: discord.Interaction, text: str):
 
 
 try:
-    bot.run("MTE0OTI3NzM0OTYwMzQ0Mjc0OA.GrkqZ6.FQoKuiEkEZzNlT5TiUJF1mulXlZ602tjzoRmRQ")
+    bot.run("YOUR BOT TOKER")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
