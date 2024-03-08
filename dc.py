@@ -7,7 +7,7 @@ import io
 from discord import ui 
 from contextlib import suppress
 from jokeapi import Jokes
-import re
+
 
 
 bot = commands.Bot(command_prefix="!", intents= discord.Intents.all())
@@ -26,6 +26,15 @@ slash_selamat_pagi = ["selamat pagi @everyone semoga hari ini adalah hari yang i
                       "bangun bangun udah pagi waktunya beraktivitas seperti biasa", "selamat pagi juga"
                       ]
 
+# jabawan game matematika
+greeting = ["hello", "hai"]
+interaksi_salah = ["salah oy:x:", "yang bener aja:x:", "lu kelas berapa?:x:", "gak bisa ngitung ya:x:"]
+interaksi_benar = [
+    "anda sangat cerdas:white_check_mark:", "IQ 200:scream::white_check_mark:", "bener bang:white_check_mark:", "diatas rata-rata:white_check_mark:"
+    "anda pintar:white_check_mark:", ":white_check_mark:", "ampun, bukan kaleng-kaleng:white_check_mark:", "jago banget:white_check_mark:", 
+    "albert einstein:white_check_mark:"
+                   ]
+
 
 
 @bot.event
@@ -38,7 +47,6 @@ async def on_ready():
         print(e)
 
 #tombol biru !tombol
-
 class BlueButton(discord.ui.Button):
     def __init__(self, label: str, style: discord.ButtonStyle, custom_id: str):
         super().__init__(label=label, style=style, custom_id=custom_id)
@@ -62,23 +70,12 @@ class RedButton(discord.ui.Button):
 
 
 # tombol hijau !tombol
-
 class GreenButton(discord.ui.Button):
     def __init__(Self, label: str, custom_id: str):
         super().__init__(label=label, style = discord.ButtonStyle.green, custom_id=custom_id)
 
     async def callback(self, ctx: discord.ctx):
         await ctx.response.send_message("Tombol hijau di tekan", ephemeral=True)
-#link button
-class LinkButton(discord.ui.Button):
-    def __init__(self, label: str, url: str):
-        super().__init__(label=label, style = discord.ButtonStyle.link, url=url)
-        
-    async def callback(self, ctx: discord.ctx):
-        await ctx.response.send_message("terima kasih telah mengfollow sosial media owner", ephemeral=True)
-              
-
-
 
 class MyView(discord.ui.View):
     def __init__(self):
@@ -88,11 +85,72 @@ class MyView(discord.ui.View):
         self.add_item(GreenButton(label="Tombol Hijau", custom_id="green_button"))
         self.add_item(LinkButton(label="instagram", url="https://www.instagram.com/ryxadev/",))
 
+    
+#link button
+class LinkButton(discord.ui.Button):
+    def __init__(self, label: str, url: str):
+        super().__init__(label=label, style = discord.ButtonStyle.link, url=url)
+        
+    async def callback(self, ctx: discord.ctx):
+        await ctx.response.send_message("terima kasih telah mengfollow sosial media owner", ephemeral=True)
+              
 class SosmedView(discord.ui.View):
     def __init__(self):
         super().__init__()
         self.add_item(LinkButton(label="📱Sosial Media", url="https://www.instagram.com/ryxadev/"))
 
+
+#matematika
+class MathButton1(discord.ui.Button):
+    def __init__(self, label: str, style: discord.ButtonStyle, custom_id: str):
+        super().__init__(label=label, style=style, custom_id=custom_id)
+
+    async def callback(self, interaction: discord.Interaction):
+        if self.label == "2":
+            await interaction.response.send_message(random.choice(interaksi_benar))
+        else: 
+            await interaction.response.send_message(random.choice(interaksi_salah))
+
+
+class MathButton1View(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        buttons = [ 
+           MathButton1(label="3", style=discord.ButtonStyle.blurple, custom_id="button1"),
+           MathButton1(label="4", style=discord.ButtonStyle.blurple, custom_id="button2"),
+           MathButton1(label="1", style=discord.ButtonStyle.blurple, custom_id="button3"),
+           MathButton1(label="2", style=discord.ButtonStyle.blurple, custom_id="button4")
+        ]
+        random.shuffle(buttons)
+        for button in buttons:
+            self.add_item(button)
+        
+
+class MathButton2(discord.ui.Button):
+    def __init__(self, label: str, style: discord.ButtonStyle, custom_id: str):
+        super().__init__(label=label, style=style, custom_id=custom_id)
+
+    async def callback(self, interaction: discord.Interaction):
+        
+        if self.label == "6":
+            await interaction.response.send_message(random.choice(interaksi_benar))
+        else:
+            await interaction.response.send_message(random.choice(interaksi_salah))
+        
+class MathButton2View(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        buttons = [
+            MathButton2(label="6", style=discord.ButtonStyle.blurple, custom_id="button5"),
+            MathButton2(label="3", style=discord.ButtonStyle.blurple, custom_id="button6"),
+            MathButton2(label="7", style=discord.ButtonStyle.blurple, custom_id="button7"),
+            MathButton2(label="10", style=discord.ButtonStyle.blurple, custom_id="button8")
+        ]
+        random.shuffle(buttons)
+        for button in buttons:
+            self.add_item(button)
+
+    
 
 @bot.event
 async def on_message(ctx):
@@ -145,7 +203,6 @@ async def on_message(ctx):
       
     
  
-
     # kalkulasi
     if ctx.content.startswith("!kalkulasi"):
         expression = ctx.content[len("!kalkulasi"):].strip()
@@ -158,8 +215,6 @@ async def on_message(ctx):
 
 
     
-
-
     if ctx.content.startswith("!canda"):
         try:
             j = await Jokes()
@@ -177,6 +232,8 @@ async def on_message(ctx):
             ctx_content += f" ||{joke['delivery']}||"
             
         await ctx.channel.send(ctx_content)
+
+
 
     if ctx.content.startswith("!join"): 
         channel = ctx.author.voice.channel if ctx.author.voice else None
@@ -205,6 +262,16 @@ async def on_message(ctx):
            list_jawaban.add_field(name="Jawaban", value=kata, inline=False)
        await ctx.channel.send(embed=list_jawaban)
 
+
+    if ctx.content.startswith("!math"):
+        view_soal_1 = MathButton1View()
+        view_soal_2 = MathButton2View()
+        soal = ["1 + 1 = ?", "2 * 3 = ?"]
+        soal_jawaban = random.choice(soal)
+        if soal_jawaban == soal[0]:
+            await ctx.channel.send(soal_jawaban, view=view_soal_1)
+        elif soal_jawaban == soal[1]:
+            await ctx.channel.send(soal_jawaban, view=view_soal_2)
 
     
 
@@ -256,7 +323,6 @@ async def helping(interaction: discord.Interaction):
 
 
 
-
 #other
 @bot.tree.command(name="other", description="berbagai macam fitur dari bot ini")
 async def other(interaction = discord.Interaction):
@@ -281,6 +347,20 @@ async def other(interaction = discord.Interaction):
     
     await interaction.response.send_message(embed=embed)
 
+
+@bot.tree.command(name="game", description="berbagai macam game")
+async def game(interaction: discord.Interaction):
+    embed = discord.Embed(title="game", color=0x3399ff)
+    games = {
+        "/tebak angka": "menembak angka dari 1-10",
+        "!math": "menjawab soal matematika mudah"
+    }
+
+    for isi, deskripsi in games.items():
+        embed.add_field(name=f"```{isi}```", value=deskripsi, inline=True)
+        print("anda menggunakan embed game")
+
+    await interaction.response.send_message(embed=embed)
 
 
 
@@ -307,76 +387,59 @@ async def random1(interaction = discord.Interaction):
 
 #hybrid command
 @bot.hybrid_command(name="say", description="say something")
-async def say(interaction: discord.cinteraction, text: str):
+async def say(ctx: discord.ctx, text: str):
     response = ""
     if text == "hi":
-        response = f"hi juga {interaction.author.mention}"
+        response = f"hi juga {ctx.author.mention}"
     elif text == "selamat pagi":
-        response = f"selamat pagi juga {interaction.author.mention}"
+        response = f"selamat pagi juga {ctx.author.mention}"
     else:
         response = text
 
-    await interaction.send(content=response)
+    await ctx.send(content=response)
 
 
 
 @bot.hybrid_command(name="botping", description="menunjukan ping ms")
-async def botping(interaction: discord.interaction, text: str):
+async def botping(ctx: discord.ctx, text: str):
     latency = round(bot.latency * 1000)
     view_ping = ""
     if text.lower() == "ping":
         view_ping = f"kecepatan bot kamu adalah {latency} ms"
         print(view_ping)
-        await interaction.send(content=view_ping)
+        await ctx.send(content=view_ping)
     else:
-        await interaction.send("hanya bisa ketik ping")
+        await ctx.send("hanya bisa ketik ping")
 
 
 @bot.hybrid_command(name="tebak_angka", description="Mainkan game menebak angka (1-10)")
-async def tebak_angka(interaction: discord.interaction, angka: int):
+async def tebak_angka(ctx: discord.ctx, angka: int):
     angka_random = random.randint(1, 10)  # Inisialisasi angka_random di luar loop
     while True:  # Gunakan while True untuk menjalankan loop tanpa kondisi yang spesifik
         if angka < angka_random:
-            await interaction.send("Angka terlalu kecil. Coba lagi!")
+            await ctx.send("Angka terlalu kecil. Coba lagi!")
         elif angka > angka_random:
-            await interaction.send("Angka terlalu besar. Coba lagi!")
+            await ctx.send("Angka terlalu besar. Coba lagi!")
         else:
-            await interaction.send(f"Selamat! Angka yang benar adalah {angka_random}. Anda menang!")
+            await ctx.send(f"Selamat! Angka yang benar adalah {angka_random}. Anda menang!")
             break  # Keluar dari loop setelah pemain menebak dengan benar
         return  # Keluar dari perintah dan menunggu interaksi berikutnya  
 
 #text ke biner
 @bot.hybrid_command(name="biner", description="mengkonversikan text ke biner")
-async def biner(interaction: discord.interaction, text: str):
+async def biner(ctx: discord.ctx, text: str):
     if text.isdigit():
         angka_biner = format(int(text), "08b")
-        await interaction.send(angka_biner)
+        await ctx.send(angka_biner)
         print("anda menggunakan teks to biner")
     elif text == "list":
         for i in range(11):
             biner2 = format(i, "08b")
-            await interaction.send(f"angka {i} adalah {biner2}")
+            await ctx.send(f"angka {i} adalah {biner2}")
     else:
        biner = " ".join(format(ord(char), "08b") for char in text)
-       await interaction.send(biner)
+       await ctx.send(biner)
        print("anda menggunakan angka ke biner")
-
-
-@bot.hybrid_command(name="pencariemail", description="mencari sebuah email tersembunyi disuatu teks ataupun paragraf")
-async def Email(interaction: discord.Interaction, text: str):
-    if text:
-         pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
-         matches = re.findall(pattern, text)
-         if len(matches) > 0:
-             for nomor_urut, email in enumerate(matches, start=1):
-                 await interaction.send("Email yang ditemukan:", ephemeral=True)
-                 await interaction.send(f"{nomor_urut}. {email}", ephemeral=True)
-         else:
-             await interaction.send("Tidak ditemukan email dalam teks yang diberikan.")
-    else:
-        await interaction.send("Mohon berikan teks untuk mencari email.")
-
-
 
 
 
@@ -385,6 +448,6 @@ async def Email(interaction: discord.Interaction, text: str):
 
 
 try:
-    bot.run("YOUR BOT TOKER")
+    bot.run("YOUR BOT TOKEN")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
