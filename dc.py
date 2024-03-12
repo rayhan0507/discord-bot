@@ -615,6 +615,6 @@ async def biner(ctx: discord.ctx, text: str):
 
 
 try:
-    bot.run("MTE0OTI3NzM0OTYwMzQ0Mjc0OA.GBjPOI.bbZz4_t_83g9DGmtU2uSTYS-xmYMMiqEETJ8FI")
+    bot.run("YOUR BOT TOKEN")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
