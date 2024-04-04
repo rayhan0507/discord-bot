@@ -8,10 +8,13 @@ from discord import ui
 from contextlib import suppress
 from jokeapi import Jokes
 import datetime
+from collections import defaultdict
 
 
 
 bot = commands.Bot(command_prefix="!", intents= discord.Intents.all())
+
+user_message_count = defaultdict(int)
 
 
 pertanyaan = [("satu kata untuk saya")]
@@ -440,6 +443,21 @@ async def on_message(ctx):
         else:
             None
 
+    # Meningkatkan hitungan pesan pengguna
+    user_message_count[ctx.author.id] += 1
+
+    # Memeriksa apakah pengguna telah mengirim lebih dari 5 pesan
+    if user_message_count[ctx.author.id] > 5:
+        # Balas pesan yang dianggap spam dengan pesan dari bot
+        await ctx.reply("JANGAN SPAM KOCAK :rage:")
+        # Reset hitungan pesan untuk pengguna tersebut
+        user_message_count[ctx.author.id] = 0
+    else:
+        # Jika pesan pengguna belum mencapai ambang batas, lanjutkan seperti biasa
+        await bot.process_commands(ctx)
+        
+            
+
     
 
 
@@ -625,10 +643,8 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 
 
 
-
-
 try:
-    bot.run("YOUR TOKEN")
+    bot.run("YOUR BOT TOKEN")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
 
