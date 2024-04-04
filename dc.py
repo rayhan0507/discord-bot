@@ -7,6 +7,7 @@ import io
 from discord import ui 
 from contextlib import suppress
 from jokeapi import Jokes
+import datetime
 
 
 
@@ -483,6 +484,7 @@ async def helping(interaction: discord.Interaction):
     for command, description in commands_info.items(): 
         if commands_info:
           embed.add_field(name=f"```{command}```", value=description, inline=True)
+          print(f"{interaction.user.mention} menggunakan command help")
 
     await interaction.response.send_message(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
 
@@ -492,14 +494,15 @@ async def helping(interaction: discord.Interaction):
 #other
 @bot.tree.command(name="other", description="berbagai macam fitur dari bot ini")
 async def other(interaction = discord.Interaction):
-    embed = discord.Embed(title = "Fitur lain help", color=0x3399ff)
+    embed = discord.Embed(title = "Fitur lain", color=0x3399ff)
 
     other_commands = {
         "/randomchat": "sebuah hal hal random dan unik",
         "/game": "beberapa game dengan bot",
         "/say": "tanyakan sesuatu kepada bot",
         "/botping": "menunjukan kecepatan ping dari bot anda",
-        "/biner": "mengubah text atau angka ke dalam angka biner"
+        "/biner": "mengubah text atau angka ke dalam angka biner",
+        "/copy_generator": "spam message generator"
 
 
     }
@@ -509,7 +512,7 @@ async def other(interaction = discord.Interaction):
            print("fitur other anda kurang")
         else:
            embed.add_field(name=f"```{komentar}```", value=deskripsi, inline=True)
-           print("anda membuka fitur other embed")
+           print(f"{interaction.user.mention} membuka fitur other embed")
     
     await interaction.response.send_message(embed=embed)
 
@@ -524,7 +527,7 @@ async def game(interaction: discord.Interaction):
 
     for isi, deskripsi in games.items():
         embed.add_field(name=f"```{isi}```", value=deskripsi, inline=True)
-        print("anda menggunakan embed game")
+        print(f"{interaction.user.mention} menggunakan embed game")
 
     await interaction.response.send_message(embed=embed)
 
@@ -542,7 +545,7 @@ async def random1(interaction = discord.Interaction):
     for komen, description1 in random_command.items():
         embed.add_field(name=f"```{komen}```", value=description1, inline=True)
         embed.set_author(name="cobalah pesan random di bawah ini!")
-        print("anda menggunakan random_command")
+        print(f"{interaction.user.mention} random_command")
 
     await interaction.response.send_message(embed=embed)
 
@@ -588,8 +591,8 @@ async def tebak_angka(ctx: discord.ctx, angka: int):
             await ctx.send("Angka terlalu besar. Coba lagi!")
         else:
             await ctx.send(f"Selamat! Angka yang benar adalah {angka_random}. Anda menang!")
-            break  # Keluar dari loop setelah pemain menebak dengan benar
-        return  # Keluar dari perintah dan menunggu interaksi berikutnya  
+            break  
+        return  
 
 #text ke biner
 @bot.hybrid_command(name="biner", description="mengkonversikan text ke biner")
@@ -611,8 +614,12 @@ async def biner(ctx: discord.ctx, text: str):
 @bot.hybrid_command(name="copy_generator", description="membuat kata berulang")
 async def copy(interaction: discord.Interaction, text:str, jumlah:int):
     if isinstance(text, (int, float, str) or isinstance(jumlah, (int,float))):
-        copy_text = text * jumlah
-        await interaction.send(copy_text)
+        copy_text = " ".join([text] * jumlah)
+        await interaction.send(f"{copy_text} ", ephemeral = True)
+
+
+
+
 
 
 
@@ -621,7 +628,8 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 
 
 try:
-    bot.run("YOUR BOT")
+    bot.run("YOUR TOKEN")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
+
  
