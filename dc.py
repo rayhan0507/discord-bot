@@ -12,6 +12,7 @@ from collections import defaultdict
 
 
 
+
 bot = commands.Bot(command_prefix="!", intents= discord.Intents.all())
 
 user_message_count = defaultdict(int)
@@ -78,7 +79,7 @@ class GreenButton(discord.ui.Button):
     def __init__(Self, label: str, custom_id: str):
         super().__init__(label=label, style = discord.ButtonStyle.green, custom_id=custom_id)
 
-    async def callback(self, ctx: discord.ctx):
+    async def callback(self, ctx: discord.ctx): 
         await ctx.response.send_message("Tombol hijau di tekan", ephemeral=True)
 
 class MyView(discord.ui.View):
@@ -101,7 +102,8 @@ class LinkButton(discord.ui.Button):
 class SosmedView(discord.ui.View):
     def __init__(self):
         super().__init__()
-        self.add_item(LinkButton(label="📱Sosial Media", url="https://www.instagram.com/ryxadev/"))
+        self.add_item(LinkButton(label="📱ryxagnrl", url="https://www.instagram.com/ryxagnrl/"))
+        self.add_item(LinkButton(label="📱ryyxaaaa", url="https://www.instagram.com/ryyxaaaa/"))
 
 
 #matematika -----------------------------------------------------------
@@ -294,17 +296,43 @@ class MathButton8View(discord.ui.View):
             self.add_item(tombol)
 
 
-            
+
+#drop down
+class DropdownSelect1(discord.ui.Select):
+    def __init__(self):      
+            options=[
+                discord.SelectOption(label="1", value="1", description="umur 1 tahun"),
+                discord.SelectOption(label="2", value="2", description="umur 2 tahun"),
+                discord.SelectOption(label="3", value="3", description="umur 3 tahun"),
+            ]
+
+            super().__init__(placeholder="what is your age?", options=options, min_values=1, max_values=2)
+    
+    async def callback(self, interaction: discord.Interaction):
+        await interaction.response.send_message(f"kamu memilih {self.values[0]} sebagai umur kamu dan {self.values[0]}")
+        
+        
+class DropdownView1(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+        self.add_item(DropdownSelect1())
 
 
+    
     
 
 @bot.event
 async def on_message(ctx):
+    ctx_content = ""
+
     if ctx.author == bot.user:
         return
     
-    ctx_content = ""
+
+    if ctx.content.startswith("!age"):
+        await ctx.channel.send("Select your age:", view=DropdownView1())  
+        
+
 
     if ctx.content.startswith("!tombol"):
         view = MyView()
@@ -333,8 +361,8 @@ async def on_message(ctx):
     if ctx.content.startswith("!sosmed"):
       view = SosmedView()
       embed = discord.Embed(title="ryxadev", 
-                            url="https://www.instagram.com/ryxadev/", 
-                            description="udah follow instagramnya owner server ini belum?, bisa juga mencari manual: @ryxadev", 
+                            url="https://www.instagram.com/ryxagrnl/", 
+                            description="udah follow instagramnya owner server ini belum?, bisa juga mencari manual: @ryxagnrl", 
                             color=0x3399ff
                             )
 
@@ -443,17 +471,13 @@ async def on_message(ctx):
         else:
             None
 
-    # Meningkatkan hitungan pesan pengguna
+    
     user_message_count[ctx.author.id] += 1
 
-    # Memeriksa apakah pengguna telah mengirim lebih dari 5 pesan
     if user_message_count[ctx.author.id] > 5:
-        # Balas pesan yang dianggap spam dengan pesan dari bot
         await ctx.reply("JANGAN SPAM KOCAK :rage:")
-        # Reset hitungan pesan untuk pengguna tersebut
         user_message_count[ctx.author.id] = 0
     else:
-        # Jika pesan pengguna belum mencapai ambang batas, lanjutkan seperti biasa
         await bot.process_commands(ctx)
         
             
@@ -492,7 +516,7 @@ async def helping(interaction: discord.Interaction):
         "!join": "memasukan bot ke voice room",
         "!leave": "membantu mengeluarkan bot dari voice room",
         "!sosmed": "menunjukan sosial media owner",
-        "!joke": "berbagai macam joke",
+        "!canda": "berbagai macam joke",
         
         "/other": "fitur yang lain"
 
@@ -643,8 +667,10 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 
 
 
+
+
 try:
-    bot.run("YOUR BOT TOKEN")
+    bot.run("your token")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
 
