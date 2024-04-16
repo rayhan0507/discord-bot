@@ -42,6 +42,7 @@ interaksi_benar = [
 
 
 
+
 @bot.event
 async def on_ready():
     print("bot berhasil di aktifkan {0.user}".format(bot))
@@ -306,7 +307,7 @@ class DropdownSelect1(discord.ui.Select):
                 discord.SelectOption(label="3", value="3", description="umur 3 tahun"),
             ]
 
-            super().__init__(placeholder="what is your age?", options=options, min_values=1, max_values=2)
+            super().__init__(placeholder="what is your age?", options=options, min_values=1, max_values=1)
     
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.send_message(f"kamu memilih {self.values[0]} sebagai umur kamu dan {self.values[0]}")
@@ -316,6 +317,34 @@ class DropdownView1(discord.ui.View):
     def __init__(self):
         super().__init__()
         self.add_item(DropdownSelect1())
+
+
+class DropdownHelp(discord.ui.Select):
+    def __init__(self):
+        options = [
+            discord.SelectOption(label="👋hi", value="!hi", description="menyapa anda"),
+            discord.SelectOption(label="🌄selamatpagi", value="!selamatpagi", description="menyapa anda di pagi hari"),
+            discord.SelectOption(label="🌃selamatmalam", value="!selamatmalam", description="menyapa anda di malam hari"),
+            discord.SelectOption(label="🖩kalkulasi", value="!kalkulasi", description="membantu menghitung angka operasi"),
+            discord.SelectOption(label="🎤join", value="!join", description="memasukan bot ke voice room"),
+            discord.SelectOption(label="🔇leave", value="!leave", description="mengeluarkan bot dari voice room"),
+            discord.SelectOption(label="📱sosmed", value="!sosmed", description="sosial media owner"),
+            discord.SelectOption(label="😂canda", value="!canda", description="berbagai macam joke"),  
+            discord.SelectOption(label="✏️other", value="/other", description="fitur lain"),
+            
+        ]
+        super().__init__(placeholder="pilih perintah yang ingin kau bantu",options=options, min_values = 1, max_values = 1)
+
+    async def callback(self, interaction: discord.Interaction):
+        await interaction.response.send_message("sedang tahap pengembangan")
+
+
+class DropdownHelpView(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+        self.add_item(DropdownHelp())
+
+
 
 
     
@@ -477,8 +506,6 @@ async def on_message(ctx):
     if user_message_count[ctx.author.id] > 5:
         await ctx.reply("JANGAN SPAM KOCAK :rage:")
         user_message_count[ctx.author.id] = 0
-    else:
-        await bot.process_commands(ctx)
         
             
 
@@ -514,8 +541,8 @@ async def helping(interaction: discord.Interaction):
         "!selamat malam": "menyapa anda di malam hari",
         "!kalkulasi": "membantu menghitung angka operasi",
         "!join": "memasukan bot ke voice room",
-        "!leave": "membantu mengeluarkan bot dari voice room",
-        "!sosmed": "menunjukan sosial media owner",
+        "!leave": "mengeluarkan bot dari voice room",
+        "!sosmed": "sosial media owner",
         "!canda": "berbagai macam joke",
         
         "/other": "fitur yang lain"
@@ -528,7 +555,7 @@ async def helping(interaction: discord.Interaction):
           embed.add_field(name=f"```{command}```", value=description, inline=True)
           print(f"{interaction.user.mention} menggunakan command help")
 
-    await interaction.response.send_message(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
+    await interaction.response.send_message(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"), view=DropdownHelpView())
 
 
 
@@ -670,7 +697,7 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 
 
 try:
-    bot.run("your token")
+    bot.run("Myour token")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
 
