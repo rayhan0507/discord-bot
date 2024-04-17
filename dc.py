@@ -336,7 +336,79 @@ class DropdownHelp(discord.ui.Select):
         super().__init__(placeholder="pilih perintah yang ingin kau bantu",options=options, min_values = 1, max_values = 1)
 
     async def callback(self, interaction: discord.Interaction):
-        await interaction.response.send_message("sedang tahap pengembangan")
+        if self.values[0] == "!hi":
+          await interaction.response.send_message(f"hi <@{interaction.user.id}>")
+        elif self.values[0] == "!selamatpagi":
+          await interaction.response.send_message(f"Selamat pagi juga <@{interaction.user.id}>!")
+        elif self.values[0] == "!selamatmalam":
+          await interaction.response.send_message("Selamat malam, waktunya untuk tidur :sleeping:")
+        elif self.values[0] == "!kalkulasi":
+          await interaction.response.send_message("Silakan ketik ekspresi matematika yang ingin Anda hitung setelah perintah `!kalkulasi`, misalnya `!kalkulasi 2 + 2`.")
+        elif self.values[0] == "!join":
+          await interaction.response.send_message("ketik !join untuk memasukan bot ke voice room")
+        elif self.values[0] == "!leave":
+          await interaction.response.send_message("ketik !leave untuk mengeluarkan bot dari voice room")
+        elif self.values[0] == "!sosmed":
+          view = SosmedView()
+          embed = discord.Embed(title="ryxadev", 
+                            url="https://www.instagram.com/ryxagrnl/", 
+                            description="udah follow instagramnya owner server ini belum?, bisa juga mencari manual: @ryxagnrl", 
+                            color=0x3399ff
+                            )
+
+          with open("C:\\Users\\USER\\Pictures\\Saved Pictures\\ryxaai.jpg", "rb") as file:
+             image = file.read()
+
+          embed.set_thumbnail(url="attachment://ryxaai.jpg") #thumbnail gambar
+          embed.set_footer(text="ryxa general ai")
+          embed.set_author(name="Social media owner")
+      
+
+          await interaction.response.send_message(embed=embed, view=view, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
+          
+        elif self.values[0] == "!canda":
+          try:
+              j = await Jokes()
+              blacklist = ["racist", "sexist"]  # Definisikan variabel blacklist
+              joke = await j.get_joke(blacklist=blacklist)
+          except Exception as e:
+              print(f"Error while fetching joke: {e}")
+              return
+
+          ctx_content = ""
+          if joke["type"] == "single":
+              ctx_content = joke["joke"]
+          else:
+              ctx_content = joke["setup"]
+              ctx_content += f" ||{joke['delivery']}||"
+            
+          await interaction.response.send_message(ctx_content)        
+
+        elif self.values[0] == "/other":
+            embed = discord.Embed(title = "Fitur lain", color=0x3399ff)
+
+            other_commands = {
+               "/randomchat": "sebuah hal hal random dan unik",
+               "/game": "beberapa game dengan bot",
+               "/say": "tanyakan sesuatu kepada bot",
+               "/botping": "menunjukan kecepatan ping dari bot anda",
+               "/biner": "mengubah text atau angka ke dalam angka biner",
+               "/copy_generator": "spam message generator"
+
+
+            }
+
+            for komentar, deskripsi in other_commands.items():
+                if other_commands.items() == len(other_commands):
+                   print("fitur other anda kurang")
+                else:
+                    embed.add_field(name=f"```{komentar}```", value=deskripsi, inline=True)
+                    print(f"{interaction.user.mention} membuka fitur other embed")
+    
+            await interaction.response.send_message(embed=embed)   
+
+
+
 
 
 class DropdownHelpView(discord.ui.View):
@@ -348,8 +420,6 @@ class DropdownHelpView(discord.ui.View):
 
 
     
-    
-
 @bot.event
 async def on_message(ctx):
     ctx_content = ""
@@ -697,7 +767,7 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 
 
 try:
-    bot.run("Myour token")
+    bot.run("your token")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
 
