@@ -16,6 +16,7 @@ from collections import defaultdict
 bot = commands.Bot(command_prefix="!", intents= discord.Intents.all())
 
 user_message_count = defaultdict(int)
+message_count = {}
 
 
 pertanyaan = [("satu kata untuk saya")]
@@ -138,7 +139,6 @@ class MathButton2(discord.ui.Button):
         super().__init__(label=label, style=style, custom_id=custom_id)
 
     async def callback(self, interaction: discord.Interaction):
-        
         if self.label == "6":
             await interaction.response.send_message(random.choice(interaksi_benar))
         else:
@@ -172,10 +172,10 @@ class MathButton3View(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         button = [
-            MathButton2(label="-3", style=discord.ButtonStyle.blurple, custom_id="button9"),
-            MathButton2(label="9", style=discord.ButtonStyle.blurple, custom_id="button10"),
-            MathButton2(label="-6", style=discord.ButtonStyle.blurple, custom_id="button11"),
-            MathButton2(label="3", style=discord.ButtonStyle.blurple, custom_id="button12")
+             MathButton3(label="-3", style=discord.ButtonStyle.blurple, custom_id="button9"),
+            MathButton3(label="9", style=discord.ButtonStyle.blurple, custom_id="button10"),
+            MathButton3(label="-6", style=discord.ButtonStyle.blurple, custom_id="button11"),
+            MathButton3(label="3", style=discord.ButtonStyle.blurple, custom_id="button12")
         ]
         random.shuffle(button)
         for tombol in button:
@@ -195,10 +195,10 @@ class MathButton4View(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         button = [
-            MathButton2(label="8", style=discord.ButtonStyle.blurple, custom_id="button13"),
-            MathButton2(label="4", style=discord.ButtonStyle.blurple, custom_id="button14"),
-            MathButton2(label="-9", style=discord.ButtonStyle.blurple, custom_id="button15"),
-            MathButton2(label="6", style=discord.ButtonStyle.blurple, custom_id="button16")
+            MathButton4(label="8", style=discord.ButtonStyle.blurple, custom_id="button13"),
+            MathButton4(label="4", style=discord.ButtonStyle.blurple, custom_id="button14"),
+            MathButton4(label="-9", style=discord.ButtonStyle.blurple, custom_id="button15"),
+            MathButton4(label="6", style=discord.ButtonStyle.blurple, custom_id="button16")
         ]
         random.shuffle(button)
         for tombol in button:
@@ -218,10 +218,10 @@ class MathButton5View(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         buttons = [
-            MathButton2(label="12", style=discord.ButtonStyle.blurple, custom_id="button17"),
-            MathButton2(label="14", style=discord.ButtonStyle.blurple, custom_id="button18"),
-            MathButton2(label="11", style=discord.ButtonStyle.blurple, custom_id="button19"),
-            MathButton2(label="13", style=discord.ButtonStyle.blurple, custom_id="button20")
+            MathButton5(label="12", style=discord.ButtonStyle.blurple, custom_id="button17"),
+            MathButton5(label="14", style=discord.ButtonStyle.blurple, custom_id="button18"),
+            MathButton5(label="11", style=discord.ButtonStyle.blurple, custom_id="button19"),
+            MathButton5(label="13", style=discord.ButtonStyle.blurple, custom_id="button20")
         ]
         random.shuffle(buttons)
         for tombol in buttons:
@@ -241,10 +241,10 @@ class MathButton6View(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         buttons = [
-            MathButton2(label="12", style=discord.ButtonStyle.blurple, custom_id="button21"),
-            MathButton2(label="14", style=discord.ButtonStyle.blurple, custom_id="button22"),
-            MathButton2(label="11", style=discord.ButtonStyle.blurple, custom_id="button23"),
-            MathButton2(label="13", style=discord.ButtonStyle.blurple, custom_id="button24")
+            MathButton6(label="12", style=discord.ButtonStyle.blurple, custom_id="button21"),
+            MathButton6(label="14", style=discord.ButtonStyle.blurple, custom_id="button22"),
+            MathButton6(label="11", style=discord.ButtonStyle.blurple, custom_id="button23"),
+            MathButton6(label="13", style=discord.ButtonStyle.blurple, custom_id="button24")
         ]
         random.shuffle(buttons)
         for tombol in buttons:
@@ -264,10 +264,10 @@ class MathButton7View(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         buttons = [
-            MathButton2(label="64", style=discord.ButtonStyle.blurple, custom_id="button25"),
-            MathButton2(label="36", style=discord.ButtonStyle.blurple, custom_id="button26"),
-            MathButton2(label="48", style=discord.ButtonStyle.blurple, custom_id="button27"),
-            MathButton2(label="24", style=discord.ButtonStyle.blurple, custom_id="button28")
+            MathButton7(label="64", style=discord.ButtonStyle.blurple, custom_id="button25"),
+            MathButton7(label="36", style=discord.ButtonStyle.blurple, custom_id="button26"),
+            MathButton7(label="48", style=discord.ButtonStyle.blurple, custom_id="button27"),
+            MathButton7(label="24", style=discord.ButtonStyle.blurple, custom_id="button28")
         ]
         random.shuffle(buttons)
         for tombol in buttons:
@@ -287,10 +287,10 @@ class MathButton8View(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         buttons = [
-            MathButton2(label="9", style=discord.ButtonStyle.blurple, custom_id="button29"),
-            MathButton2(label="-12", style=discord.ButtonStyle.blurple, custom_id="button30"),
-            MathButton2(label="-11", style=discord.ButtonStyle.blurple, custom_id="button31"),
-            MathButton2(label="-16", style=discord.ButtonStyle.blurple, custom_id="button32")
+            MathButton8(label="9", style=discord.ButtonStyle.blurple, custom_id="button29"),
+            MathButton8(label="-12", style=discord.ButtonStyle.blurple, custom_id="button30"),
+            MathButton8(label="-11", style=discord.ButtonStyle.blurple, custom_id="button31"),
+            MathButton8(label="-16", style=discord.ButtonStyle.blurple, custom_id="button32")
         ]
         random.shuffle(buttons)
         for tombol in buttons:
@@ -406,10 +406,6 @@ class DropdownHelp(discord.ui.Select):
                     print(f"{interaction.user.mention} membuka fitur other embed")
     
             await interaction.response.send_message(embed=embed)   
-
-
-
-
 
 class DropdownHelpView(discord.ui.View):
     def __init__(self):
@@ -548,8 +544,8 @@ async def on_message(ctx):
         view_soal_6 = MathButton6View()
         view_soal_7 = MathButton7View()
         view_soal_8 = MathButton8View()
-        soal = ["1 + 1 = ?", "2 * 3 = ?", "3 - 6 = ?", "14 - 8 = ?", 
-                "26 - 14", "39 / 3 = ?", "4 * 12 = ?", "-3 * 4 = ?"]
+        soal = [("1 + 1 = ?"), ("2 * 3 = ?"), ("3 - 6 = ?"), ("14 - 8 = ?"), 
+                ("26 - 14"), ("39 / 3 = ?"), ("4 * 12 = ?"),("-3 * 4 = ?")]
         soal_jawaban = random.choice(soal)
         if soal_jawaban == soal[0]:
             await ctx.channel.send(f"Berapakah jawaban dari {soal_jawaban}", view=view_soal_1)
@@ -571,12 +567,25 @@ async def on_message(ctx):
             None
 
     
-    user_message_count[ctx.author.id] += 1
+    if ctx.author.bot:
+        return  # abaikan pesan dari bot itu sendiri
+    
+    # Memeriksa jika pengguna sudah ada dalam dictionary
+    if ctx.author.id in message_count:
+        # Jika teks pesan sudah ada dalam dictionary, tambahkan jumlahnya
+        if ctx.content in message_count[ctx.author.id]:
+            message_count[ctx.author.id][ctx.content] += 1
+        else:
+            message_count[ctx.author.id][ctx.content] = 1
+    else:
+        message_count[ctx.author.id] = {ctx.content: 1}
+    
+    # Memeriksa jika pesan yang sama telah dikirim lebih dari 10 kali
+    if message_count[ctx.author.id][ctx.content] > 10:
+        await ctx.reply("jangan spam kocak :angry:")
+    
+    await bot.process_commands(ctx)
 
-    if user_message_count[ctx.author.id] > 5:
-        await ctx.reply("JANGAN SPAM KOCAK :rage:")
-        user_message_count[ctx.author.id] = 0
-        
             
 
     
@@ -691,8 +700,6 @@ async def random1(interaction = discord.Interaction):
 
 
 
-
-
 #hybrid command
 @bot.hybrid_command(name="say", description="say something")
 async def say(ctx: discord.ctx, text: str):
@@ -755,6 +762,7 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
     if isinstance(text, (int, float, str) or isinstance(jumlah, (int,float))):
         copy_text = " ".join([text] * jumlah)
         await interaction.send(f"{copy_text} ", ephemeral = True)
+
 
 
 
