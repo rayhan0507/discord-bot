@@ -589,25 +589,45 @@ async def on_message(ctx):
 
 
     if ctx.content.startswith("!role"):
-        print(f"{ctx.author.id} mengetik !role")
+        print(f"{ctx.author.id} mengetik !role") # biar tau ada orang yang menggunakan commandya
+        
+        # role 
         embed = discord.Embed(title="Pilih Role Anda", description="Silakan pilih role Anda", color=0x3399ff)  
         role_owner = discord.utils.get(ctx.guild.roles, name="OWNER")
+        role_orangpenting = discord.utils.get(ctx.guild.roles, name="orang penting")
+        role_ai = discord.utils.get(ctx.guild.roles, name="artificial intelligence")
+        role_developer = discord.utils.get(ctx.guild.roles, name="Developer")
+        role_fps = discord.utils.get(ctx.guild.roles, name="fps")
+        role_roblox = discord.utils.get(ctx.guild.roles, name="roblox")
+        role_fans = discord.utils.get(ctx.guild.roles, name="fans berat ryxa")
+        role_pc = discord.utils.get(ctx.guild.roles, name="PC")
         
+        #image
+        with open("C:\\Users\\USER\\Pictures\\Saved Pictures\\ryxaai.jpg", "rb") as file:
+            image = file.read()
+
+        embed.set_thumbnail(url="attachment://ryxaai.jpg")
+        embed.set_footer(text="ryxa general ai")
+
+
         
-        if role_owner is not None:
-           role_info = {
-               "Nama role": f"**<@&{role_owner.id}>**",
-               "Jumlah anggota": len(role_owner.members)
+        role_info = {
+               f"Nama role {role_owner.name}": f"**<@&{role_owner.id}>**\nJumlah anggota: {len(role_owner.members)}",
+               f"Nama role {role_orangpenting.name}": f"**<@&{role_orangpenting.id}>**\nJumlah anggota: {len(role_orangpenting.members)}",
+               f"Nama role {role_ai.name}": f"**<@&{role_ai.id}>**\nJumlah anggota: {len(role_ai.members)}",
+               f"Nama role {role_developer.name}": f"**<@&{role_developer.id}>**\nJumlah anggota: {len(role_developer.members)}",
+               f"Nama role {role_fps.name}": f"**<@&{role_fps.id}>**\nJumlah anggota: {len(role_fps.members)}",
+               f"Nama role {role_roblox.name}": f"**<@&{role_roblox.id}>**\nJumlah anggota: {len(role_roblox.members)}",
+               f"Nama role {role_fans.name}": f"**<@&{role_fans.id}>**\nJumlah anggota: {len(role_fans.members)}",
+               f"Nama role {role_pc.name}": f"**<@&{role_pc.id}>**\nJumlah anggota: {len(role_pc.members)}",
+            }
 
-           }
+        for field_name, field_value in role_info.items():
+               embed.add_field(name=field_name, value=field_value, inline=False)
 
-           for command, description in role_info.items():
-               if role_info:
-                    embed.add_field(name=command, value=description, inline=False)
-                    
-
-
-           await ctx.channel.send(embed=embed)
+        await ctx.channel.send(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
+    else:
+        await ctx.channel.send("Beberapa orang yang memakai role tidak ditemukan.")
 
 
 
