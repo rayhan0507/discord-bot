@@ -45,6 +45,8 @@ interaksi_benar = [
 #variable pelacak nomor hp di line 770
 indonesia = "62"
 
+
+
 @bot.event
 async def on_ready():
     print("bot berhasil di aktifkan {0.user}".format(bot))
@@ -319,7 +321,7 @@ class DropdownView1(discord.ui.View):
         super().__init__()
         self.add_item(DropdownSelect1())
 
-
+#drop down help
 class DropdownHelp(discord.ui.Select):
     def __init__(self):
         options = [
@@ -413,12 +415,18 @@ class DropdownHelpView(discord.ui.View):
         super().__init__()
         self.add_item(DropdownHelp())
 
+#drop down !role
+
 
 
 
 # bot event --------------------------------------------------------------------------------------------------------------------------------
 @bot.event
 async def on_message(ctx):
+    users = ctx.author.id
+    if users == 612600715088756738:
+        users = "ryXa"
+
     ctx_content = ""
 
     if ctx.author == bot.user:
@@ -428,7 +436,6 @@ async def on_message(ctx):
     if ctx.content.startswith("!age"):
         await ctx.channel.send("Select your age:", view=DropdownView1())  
         
-
 
     if ctx.content.startswith("!tombol"):
         view = MyView()
@@ -589,7 +596,27 @@ async def on_message(ctx):
 
 
     if ctx.content.startswith("!role"):
-        print(f"{ctx.author.id} mengetik !role") # biar tau ada orang yang menggunakan commandya
+        class DropdownRole(discord.ui.Select):
+            def __init__(self):
+                options=[
+                    discord.SelectOption(label="@Developer", value=f"**<@&{role_developer.id}>**"),
+                    discord.SelectOption(label="@fps", value=f"**<@&{role_fps.id}>**"),
+                    discord.SelectOption(label="@roblox", value=f"**<@&{role_roblox.id}>**"),
+                    discord.SelectOption(label="@fansberatryxa", value=f"**<@&{role_fans.id}>**"),
+                    discord.SelectOption(label="@PC", value=f"**<@&{role_pc.id}>**")
+
+                ]
+                super().__init__(placeholder="pilih roles", options=options, min_values = 1, max_values = 1)
+
+            async def callback(self, interaction: discord.Interaction):
+                await interaction.response.send_message(f"anda memilih {self.values[0]}", ephemeral=True)
+                
+
+        class DropdownRoleView(discord.ui.View):
+            def __init__(self):
+               super().__init__()
+               self.add_item(DropdownRole())
+               print(f"{users} mengetik !role") # biar tau ada orang yang menggunakan commandya
         
         # role 
         embed = discord.Embed(title="Pilih Role Anda", description="Silakan pilih role Anda", color=0x3399ff)  
@@ -625,9 +652,9 @@ async def on_message(ctx):
         for field_name, field_value in role_info.items():
                embed.add_field(name=field_name, value=field_value, inline=False)
 
-        await ctx.channel.send(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"))
-    else:
-        await ctx.channel.send("Beberapa orang yang memakai role tidak ditemukan.")
+        await ctx.channel.send(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"), view=DropdownRoleView())
+        await ctx.channel.send("peringatan: role OWNER, orang penting dan artificial intelligence tidak bisa di pilih!")
+     
 
 
 
@@ -780,6 +807,7 @@ async def tebak_angka(ctx: discord.ctx, angka: int):
             break  
         return  
 
+
 #text ke biner
 @bot.hybrid_command(name="biner", description="mengkonversikan text ke biner")
 async def biner(ctx: discord.ctx, text: str):   
@@ -810,10 +838,6 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 async def notelp(interaction: discord.Interaction, no:str):
     if no.startswith(indonesia):
         await interaction.send("Nomor ini berasal dari Indonesia.")
-
-
-
-
 
 
 
