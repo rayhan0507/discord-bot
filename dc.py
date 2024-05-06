@@ -42,7 +42,8 @@ interaksi_benar = [
                    ]
 
 
-
+#variable pelacak nomor hp di line 770
+indonesia = "62"
 
 @bot.event
 async def on_ready():
@@ -415,7 +416,7 @@ class DropdownHelpView(discord.ui.View):
 
 
 
-    
+# bot event --------------------------------------------------------------------------------------------------------------------------------
 @bot.event
 async def on_message(ctx):
     ctx_content = ""
@@ -584,11 +585,31 @@ async def on_message(ctx):
     if message_count[ctx.author.id][ctx.content] > 10:
         await ctx.reply("jangan spam kocak :angry:")
     
-    await bot.process_commands(ctx)
-
-            
-
     
+
+
+    if ctx.content.startswith("!role"):
+        print(f"{ctx.author.id} mengetik !role")
+        embed = discord.Embed(title="Pilih Role Anda", description="Silakan pilih role Anda", color=0x3399ff)  
+        role_owner = discord.utils.get(ctx.guild.roles, name="OWNER")
+        
+        
+        if role_owner is not None:
+           role_info = {
+               "Nama role": f"**<@&{role_owner.id}>**",
+               "Jumlah anggota": len(role_owner.members)
+
+           }
+
+           for command, description in role_info.items():
+               if role_info:
+                    embed.add_field(name=command, value=description, inline=False)
+                    
+
+
+           await ctx.channel.send(embed=embed)
+
+
 
 
 # bot tree command
@@ -607,6 +628,7 @@ async def selamatpagi(interaction: discord.Interaction):
 # /help
 @bot.tree.command(name="help", description="membantu anda untuk mengetahui fitur dari bot ini")
 async def helping(interaction: discord.Interaction):
+    print(f"{interaction.user.mention} menggunakan command help")
     embed = discord.Embed(title="Ryxa General AI help", color=0x3399ff)
     with open("C:\\Users\\USER\\Pictures\\Saved Pictures\\ryxaai.jpg", "rb") as file:
         image = file.read()
@@ -632,8 +654,6 @@ async def helping(interaction: discord.Interaction):
     for command, description in commands_info.items(): 
         if commands_info:
           embed.add_field(name=f"```{command}```", value=description, inline=True)
-          print(f"{interaction.user.mention} menggunakan command help")
-
     await interaction.response.send_message(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"), view=DropdownHelpView())
 
 
@@ -742,7 +762,7 @@ async def tebak_angka(ctx: discord.ctx, angka: int):
 
 #text ke biner
 @bot.hybrid_command(name="biner", description="mengkonversikan text ke biner")
-async def biner(ctx: discord.ctx, text: str):
+async def biner(ctx: discord.ctx, text: str):   
     if text.isdigit():
         angka_biner = format(int(text), "08b")
         await ctx.send(angka_biner)
@@ -757,6 +777,7 @@ async def biner(ctx: discord.ctx, text: str):
        print("anda menggunakan angka ke biner")
 
 
+
 @bot.hybrid_command(name="copy_generator", description="membuat kata berulang")
 async def copy(interaction: discord.Interaction, text:str, jumlah:int):
     if isinstance(text, (int, float, str) or isinstance(jumlah, (int,float))):
@@ -765,8 +786,10 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 
 
 
-
-
+@bot.hybrid_command(name="pelacak_nomor_telepon", description="melacak lokasi user data dengan nomor teleponya")
+async def notelp(interaction: discord.Interaction, no:str):
+    if no.startswith(indonesia):
+        await interaction.send("Nomor ini berasal dari Indonesia.")
 
 
 
@@ -778,5 +801,3 @@ try:
     bot.run("your token")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
-
- 
