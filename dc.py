@@ -599,19 +599,54 @@ async def on_message(ctx):
         class DropdownRole(discord.ui.Select):
             def __init__(self):
                 options=[
-                    discord.SelectOption(label="@Developer", value=f"**<@&{role_developer.id}>**"),
-                    discord.SelectOption(label="@fps", value=f"**<@&{role_fps.id}>**"),
-                    discord.SelectOption(label="@roblox", value=f"**<@&{role_roblox.id}>**"),
-                    discord.SelectOption(label="@fansberatryxa", value=f"**<@&{role_fans.id}>**"),
-                    discord.SelectOption(label="@PC", value=f"**<@&{role_pc.id}>**")
+                    discord.SelectOption(label="@Developer", value=f"{role_developer.id}"),
+                    discord.SelectOption(label="@fps", value=f"{role_fps.id}"),
+                    discord.SelectOption(label="@roblox", value=f"{role_roblox.id}"),
+                    discord.SelectOption(label="@fansberatryxa", value=f"{role_fans.id}"),
+                    discord.SelectOption(label="@PC", value=f"{role_pc.id}")
 
                 ]
                 super().__init__(placeholder="pilih roles", options=options, min_values = 1, max_values = 1)
 
             async def callback(self, interaction: discord.Interaction):
-                await interaction.response.send_message(f"anda memilih {self.values[0]}", ephemeral=True)
-                
-
+                if self.values[0] == f"{role_developer.id}":
+                    member = interaction.user
+                    role_id = int(self.values[0])
+                    role = interaction.guild.get_role(role_id)
+                    await member.add_roles(role)
+                    await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_developer.id}>**")
+                elif self.values[0] == f"{role_fps.id}":
+                    member = interaction.user
+                    role_id = int(self.values[0])
+                    role = interaction.guild.get_role(role_id)
+                    await member.add_roles(role)
+                    await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_fps.id}>**")
+                elif self.values[0] == f"{role_fps.id}":
+                    member = interaction.user
+                    role_id = int(self.values[0])
+                    role = interaction.guild.get_role(role_id)
+                    await member.add_roles(role)
+                    await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_fps.id}>**")
+                elif self.values[0] == f"{role_roblox.id}":
+                    member = interaction.user
+                    role_id = int(self.values[0])
+                    role = interaction.guild.get_role(role_id)
+                    await member.add_roles(role)
+                    await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_roblox.id}>**")
+                elif self.values[0] == f"{role_fans.id}":
+                    member = interaction.user
+                    role_id = int(self.values[0])
+                    role = interaction.guild.get_role(role_id)
+                    await member.add_roles(role)
+                    await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_fans.id}>**")
+                elif self.values[0] == f"{role_pc.id}":
+                    member = interaction.user
+                    role_id = int(self.values[0])
+                    role = interaction.guild.get_role(role_id) 
+                    await member.add_roles(role)
+                    await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_pc.id}>**")
+                     
+ 
         class DropdownRoleView(discord.ui.View):
             def __init__(self):
                super().__init__()
@@ -637,7 +672,6 @@ async def on_message(ctx):
         embed.set_footer(text="ryxa general ai")
 
 
-        
         role_info = {
                f"Nama role {role_owner.name}": f"**<@&{role_owner.id}>**\nJumlah anggota: {len(role_owner.members)}",
                f"Nama role {role_orangpenting.name}": f"**<@&{role_orangpenting.id}>**\nJumlah anggota: {len(role_orangpenting.members)}",
@@ -807,7 +841,6 @@ async def tebak_angka(ctx: discord.ctx, angka: int):
             break  
         return  
 
-
 #text ke biner
 @bot.hybrid_command(name="biner", description="mengkonversikan text ke biner")
 async def biner(ctx: discord.ctx, text: str):   
@@ -838,6 +871,7 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 async def notelp(interaction: discord.Interaction, no:str):
     if no.startswith(indonesia):
         await interaction.send("Nomor ini berasal dari Indonesia.")
+
 
 
 
