@@ -333,6 +333,7 @@ class DropdownHelp(discord.ui.Select):
             discord.SelectOption(label="🔇leave", value="!leave", description="mengeluarkan bot dari voice room"),
             discord.SelectOption(label="📱sosmed", value="!sosmed", description="sosial media owner"),
             discord.SelectOption(label="😂canda", value="!canda", description="berbagai macam joke"),  
+            discord.SelectOption(label="🕴role", value="!role", description="pilih role anda"),
             discord.SelectOption(label="✏️other", value="/other", description="fitur lain"),
             
         ]
@@ -409,6 +410,104 @@ class DropdownHelp(discord.ui.Select):
                     print(f"{interaction.user.mention} membuka fitur other embed")
     
             await interaction.response.send_message(embed=embed)   
+
+
+        elif self.values[0] == "!role":
+            class DropdownRole(discord.ui.Select):
+                def __init__(self):
+                    options=[
+                        discord.SelectOption(label="@Developer", value=f"{role_developer.id}"),
+                        discord.SelectOption(label="@fps", value=f"{role_fps.id}"),
+                        discord.SelectOption(label="@roblox", value=f"{role_roblox.id}"),
+                        discord.SelectOption(label="@fansberatryxa", value=f"{role_fans.id}"),
+                        discord.SelectOption(label="@PC", value=f"{role_pc.id}")
+
+                    ]
+                    super().__init__(placeholder="pilih roles", options=options, min_values = 1, max_values = 1)
+
+                async def callback(self, interaction: discord.Interaction):
+                    if self.values[0] == f"{role_developer.id}":
+                        member = interaction.user
+                        role_id = int(self.values[0])
+                        role = interaction.guild.get_role(role_id)
+                        await member.add_roles(role)
+                        await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_developer.id}>**")
+                    elif self.values[0] == f"{role_fps.id}":
+                        member = interaction.user
+                        role_id = int(self.values[0])
+                        role = interaction.guild.get_role(role_id)
+                        await member.add_roles(role)
+                        await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_fps.id}>**")
+                    elif self.values[0] == f"{role_fps.id}":
+                        member = interaction.user
+                        role_id = int(self.values[0])
+                        role = interaction.guild.get_role(role_id)
+                        await member.add_roles(role)
+                        await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_fps.id}>**")
+                    elif self.values[0] == f"{role_roblox.id}":
+                        member = interaction.user
+                        role_id = int(self.values[0])
+                        role = interaction.guild.get_role(role_id)
+                        await member.add_roles(role)
+                        await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_roblox.id}>**")
+                    elif self.values[0] == f"{role_fans.id}":
+                        member = interaction.user
+                        role_id = int(self.values[0])
+                        role = interaction.guild.get_role(role_id)
+                        await member.add_roles(role)
+                        await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_fans.id}>**")
+                    elif self.values[0] == f"{role_pc.id}":
+                        member = interaction.user
+                        role_id = int(self.values[0])
+                        role = interaction.guild.get_role(role_id) 
+                        await member.add_roles(role)
+                        await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_pc.id}>**")
+                     
+ 
+            class DropdownRoleView(discord.ui.View):
+                def __init__(self):
+                   super().__init__()
+                   self.add_item(DropdownRole())
+                   print(f"{interaction.user.mention} mengetik !role") # biar tau ada orang yang menggunakan commandya
+        
+            # role 
+            embed = discord.Embed(title="Pilih Role Anda", description="Silakan pilih role Anda", color=0x3399ff)  
+            role_owner = discord.utils.get(interaction.guild.roles, name="OWNER")
+            role_orangpenting = discord.utils.get(interaction.guild.roles, name="orang penting")
+            role_ai = discord.utils.get(interaction.guild.roles, name="artificial intelligence")
+            role_developer = discord.utils.get(interaction.guild.roles, name="Developer")
+            role_fps = discord.utils.get(interaction.guild.roles, name="fps")
+            role_roblox = discord.utils.get(interaction.guild.roles, name="roblox")
+            role_fans = discord.utils.get(interaction.guild.roles, name="fans berat ryxa")
+            role_pc = discord.utils.get(interaction.guild.roles, name="PC")
+        
+            #image
+            with open("C:\\Users\\USER\\Pictures\\Saved Pictures\\ryxaai.jpg", "rb") as file:
+                image = file.read()
+
+            embed.set_thumbnail(url="attachment://ryxaai.jpg")
+            embed.set_footer(text="ryxa general ai")
+
+
+            role_info = {
+                   f"Nama role {role_owner.name}": f"**<@&{role_owner.id}>**\nJumlah anggota: {len(role_owner.members)}",
+                   f"Nama role {role_orangpenting.name}": f"**<@&{role_orangpenting.id}>**\nJumlah anggota: {len(role_orangpenting.members)}",
+                   f"Nama role {role_ai.name}": f"**<@&{role_ai.id}>**\nJumlah anggota: {len(role_ai.members)}",
+                   f"Nama role {role_developer.name}": f"**<@&{role_developer.id}>**\nJumlah anggota: {len(role_developer.members)}",
+                   f"Nama role {role_fps.name}": f"**<@&{role_fps.id}>**\nJumlah anggota: {len(role_fps.members)}",
+                   f"Nama role {role_roblox.name}": f"**<@&{role_roblox.id}>**\nJumlah anggota: {len(role_roblox.members)}",
+                   f"Nama role {role_fans.name}": f"**<@&{role_fans.id}>**\nJumlah anggota: {len(role_fans.members)}",
+                   f"Nama role {role_pc.name}": f"**<@&{role_pc.id}>**\nJumlah anggota: {len(role_pc.members)}",
+            }
+
+            for field_name, field_value in role_info.items():
+                   embed.add_field(name=field_name, value=field_value, inline=False)
+
+            await interaction.channel.send(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"), view=DropdownRoleView())
+            await interaction.channel.send("peringatan: role OWNER, orang penting dan artificial intelligence tidak bisa di pilih!")
+
+
+
 
 class DropdownHelpView(discord.ui.View):
     def __init__(self):
@@ -726,6 +825,7 @@ async def helping(interaction: discord.Interaction):
         "!leave": "mengeluarkan bot dari voice room",
         "!sosmed": "sosial media owner",
         "!canda": "berbagai macam joke",
+        "!role": "pilih role di server ini",
         
         "/other": "fitur yang lain"
 
@@ -751,9 +851,8 @@ async def other(interaction = discord.Interaction):
         "/say": "tanyakan sesuatu kepada bot",
         "/botping": "menunjukan kecepatan ping dari bot anda",
         "/biner": "mengubah text atau angka ke dalam angka biner",
-        "/copy_generator": "spam message generator"
-
-
+        "/copy_generator": "spam message generator",
+        "/pelacak_nomor_telepon": "melacak user dengan nomor telepon"
     }
 
     for komentar, deskripsi in other_commands.items():
@@ -871,8 +970,6 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
 async def notelp(interaction: discord.Interaction, no:str):
     if no.startswith(indonesia):
         await interaction.send("Nomor ini berasal dari Indonesia.")
-
-
 
 
 try:
