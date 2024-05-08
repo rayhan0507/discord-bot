@@ -932,7 +932,6 @@ async def say(ctx: discord.ctx, text: str):
     await ctx.send(content=response)
 
 
-
 @bot.hybrid_command(name="botping", description="menunjukan ping ms")
 async def botping(ctx: discord.ctx, text: str):
     latency = round(bot.latency * 1000)
@@ -959,7 +958,6 @@ async def tebak_angka(ctx: discord.ctx, angka: int):
         return  
 
 
-
 #text ke biner
 @bot.hybrid_command(name="biner", description="mengkonversikan text ke biner")
 async def biner(ctx: discord.ctx, text: str):   
@@ -977,7 +975,6 @@ async def biner(ctx: discord.ctx, text: str):
        print("anda menggunakan angka ke biner")
 
 
-
 @bot.hybrid_command(name="copy_generator", description="membuat kata berulang")
 async def copy(interaction: discord.Interaction, text:str, jumlah:int):
     if isinstance(text, (int, float, str) or isinstance(jumlah, (int,float))):
@@ -985,11 +982,27 @@ async def copy(interaction: discord.Interaction, text:str, jumlah:int):
         await interaction.send(f"{copy_text} ", ephemeral = True)
 
 
-
 @bot.hybrid_command(name="pelacak_nomor_telepon", description="melacak lokasi user data dengan nomor teleponya")
 async def notelp(interaction: discord.Interaction, no:str):
     if no.startswith(indonesia):
         await interaction.send("Nomor ini berasal dari Indonesia.")
+
+
+@bot.hybrid_command(name="kick", description="kick user di server ini")
+async def kick(interaction: discord.Interaction, member:discord.Member, *,alasan:str):
+    if alasan == None:
+        alasan = "tidak ada alasan"
+
+    elif member.name == ("davzz") or ("feii") or ("RYmeister") or ("Ryxa general AI"):
+        await interaction.send("orang ini tidak bisa di kick")
+
+    elif member.name == "ryXa":
+        await interaction.send(f"maksud nya apa kamu ya?\n{member.mention} baru saja mengkick ownernya sendiri dari server ini dengan alasan {alasan}:interrobang::interrobang:\n:point_up_2::rage:jangan tiru sifat orang ini yah")
+
+    else:
+       await interaction.guild.kick(member)
+       await interaction.send(f"{member.mention} telah di kick dari server karena {alasan}")
+   
 
 
 try:
