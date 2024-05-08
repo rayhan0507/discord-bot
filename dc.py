@@ -9,7 +9,9 @@ from contextlib import suppress
 from jokeapi import Jokes
 import datetime
 from collections import defaultdict
-
+import qrcode as qr
+from pyzbar.pyzbar import decode
+from PIL import Image
 
 
 
@@ -334,7 +336,9 @@ class DropdownHelp(discord.ui.Select):
             discord.SelectOption(label="📱sosmed", value="!sosmed", description="sosial media owner"),
             discord.SelectOption(label="😂canda", value="!canda", description="berbagai macam joke"),  
             discord.SelectOption(label="🕴role", value="!role", description="pilih role anda"),
+            discord.SelectOption(label="📎qr", value="!qr", description="membuat qrcode"),
             discord.SelectOption(label="✏️other", value="/other", description="fitur lain"),
+            
             
         ]
         super().__init__(placeholder="pilih perintah yang ingin kau bantu",options=options, min_values = 1, max_values = 1)
@@ -415,7 +419,7 @@ class DropdownHelp(discord.ui.Select):
         elif self.values[0] == "!role":
             class DropdownRole(discord.ui.Select):
                 def __init__(self):
-                    options=[
+                    options=[ 
                         discord.SelectOption(label="@Developer", value=f"{role_developer.id}"),
                         discord.SelectOption(label="@fps", value=f"{role_fps.id}"),
                         discord.SelectOption(label="@roblox", value=f"{role_roblox.id}"),
@@ -463,6 +467,11 @@ class DropdownHelp(discord.ui.Select):
                         await member.add_roles(role)
                         await interaction.response.send_message(f"{member.mention} mendapatkan role **<@&{role_pc.id}>**")
                      
+
+
+        elif self.values[0] == "!qr":
+            await interaction.response.send_message("ketik !qr lalu link tautan, contoh= !qr https://example.com")
+
  
             class DropdownRoleView(discord.ui.View):
                 def __init__(self):
@@ -559,6 +568,10 @@ async def on_message(ctx):
     if any(apresiasi1 in ctx.content.lower() for apresiasi1 in kata_apresiasi):
         await ctx.channel.send(random.choice(kata_apresiasi_jawaban))
 
+    if ctx.content.startswith("!image"):
+        url = "https://i.pinimg.com/564x/ca/d2/de/cad2de36f8956639dccb7fec0bc50174.jpg"
+        await ctx.channel.send(url)
+
     
     if ctx.content.startswith("!sosmed"):
       view = SosmedView()
@@ -609,6 +622,14 @@ async def on_message(ctx):
             ctx_content += f" ||{joke['delivery']}||"
             
         await ctx.channel.send(ctx_content)
+
+
+    if ctx.content.startswith("!qr"):
+       link = ctx.content[len("!qr"):].strip() 
+       ukuran = 10  
+       qr_image = qr.make(link)  
+       qr_image.save("qrcode.png")  
+       await ctx.channel.send(file=discord.File("qrcode.png"))
 
 
 
@@ -790,8 +811,6 @@ async def on_message(ctx):
      
 
 
-
-
 # bot tree command
 @bot.tree.command(name="hello", description="menyapa")
 async def hello(interaction: discord.Interaction):
@@ -826,7 +845,7 @@ async def helping(interaction: discord.Interaction):
         "!sosmed": "sosial media owner",
         "!canda": "berbagai macam joke",
         "!role": "pilih role di server ini",
-        
+        "!qr": "membuat qrcode",
         "/other": "fitur yang lain"
 
     }
@@ -836,7 +855,6 @@ async def helping(interaction: discord.Interaction):
         if commands_info:
           embed.add_field(name=f"```{command}```", value=description, inline=True)
     await interaction.response.send_message(embed=embed, file=discord.File(io.BytesIO(image), "ryxaai.jpg"), view=DropdownHelpView())
-
 
 
 
@@ -863,6 +881,7 @@ async def other(interaction = discord.Interaction):
            print(f"{interaction.user.mention} membuka fitur other embed")
     
     await interaction.response.send_message(embed=embed)
+
 
 
 @bot.tree.command(name="game", description="berbagai macam game")
@@ -896,7 +915,6 @@ async def random1(interaction = discord.Interaction):
         print(f"{interaction.user.mention} random_command")
 
     await interaction.response.send_message(embed=embed)
-
 
 
 
@@ -940,6 +958,8 @@ async def tebak_angka(ctx: discord.ctx, angka: int):
             break  
         return  
 
+
+
 #text ke biner
 @bot.hybrid_command(name="biner", description="mengkonversikan text ke biner")
 async def biner(ctx: discord.ctx, text: str):   
@@ -973,6 +993,6 @@ async def notelp(interaction: discord.Interaction, no:str):
 
 
 try:
-    bot.run("your token")
+    bot.run("your bot token")
 except Exception as e:
     print(f"terjadi kesalahan di bot anda: {e}")
